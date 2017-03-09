@@ -8,15 +8,13 @@ int W(int n){int u,v,w;w=0x1000/(u=1<<(++n)/3+(n==8))/(v=010<<n%3);return u|v|w;
 int S(int *b){
 	// win or block win
 	int u, v, w, m, o;
-	for(o = 0; o < 10; o+=9){
-	for(u = 1; u<9; u*=2){
-	for(v = u*2; v<33; v*=2){
-		m=(w=(1<<12)/u/v)|v|u;
-		if (w<257 && N(m&*b>>o)==2 && M(b, m^m&(*b|*b>>9))) {
-				puts(o?"block.":"win.");
-				return 1;
+
+	for (int i = 0; i < 16; ++i) {
+		m=W(i%8);
+		if (N(m&*b>>(i/8?9:0))==2 && M(b, m^m&(*b|*b>>9))) {
+			return 1;
 		}
-	}}}
+	}
 
 	// fork or block fork
 	
