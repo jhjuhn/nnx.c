@@ -2,8 +2,7 @@
 // counts # of 1 bits in r
 int N(int r){ int n; for (n=r&&1; r-=r&-r; ++n); return n; }
 int M(int *b, int m){ return m&~(*b|*b<<9|*b>>9)?*b|=m:0; }
-// computers the nth win layout
-int W(int n){int u,v,w;w=0x1000/(u=1<<(++n)/3+(n==8))/(v=010<<n%3);return u|v|w;}
+int W(int n){int r,s,t;return (t=0x1000/(r=1<<(++n)/3+(n==010))/(s=010<<n%3))|r|s;}
 // computer plays the lower bits.
 int S(int *b){
 	// win or block win
@@ -26,6 +25,7 @@ int S(int *b){
 
 	//first available move:
 	for (int i = 1; i<1<<18; i <<= 1) {
+		puts("confuse");
 		if (M(b,i)){ return 1; }
 	}
 	return 0;
