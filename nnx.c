@@ -3,41 +3,35 @@
 int N(int r){ int n; for (n=r&&1; r-=r&-r; ++n); return n; }
 int O(int b){ return b<<9; }
 // computes the ith winning position.
+int w[8];
 int W(int n){int r,s,t;return (t=0x1000/(r=1<<(++n)/3+(n==010))/(s=010<<n%3))|r|s;}
 // computer plays the lower bits.
 int S(int *b){
+	int f, x;
 	// win or block win.
-	int w;
-	for (int i = 0; i < 8; ++i) {
-		w = W(i);
-		if (N(w&*b) == 2 && N(w&(*b|*b>>9)) == 2) {
+	for (int i = 0; i < 16; ++i) {
+		f = w[i%8]; x = w[i%8]^w[i%8]&*b>>9;
+		if (N(f&*b>>(i>7?9:0)) == 2 && N(f&(*b|*b>>9)) == 2) {
 			puts("win.");
-			return *b|= w^w&*b>>9;
-		}
-	}
-	for (int i = 0; i < 8; ++i) {
-		w = W(i);
-		if (N(w&*b>>9) == 2 && N(w&(*b|*b>>9)) == 2) {
-			puts("blk.");
-			return *b|= w^w&*b>>9;
+			return *b|= x;
 		}
 	}
 	// fork or block fork
-	for (int i = 0; i < 8; ++i) {
-	for (int j = 0; j < 8; ++j) { w = W(i)|W(j);
-		if (N(w&*b) == 2 && N(w&(*b|*b>>9)) == 2 && W(i)&W(j)) {
-			printf("frk %d %d\n", W(i), W(j));
-			return *b|=W(i)&W(j);
+	int i, j;
+	for (int k = 0; k < 128; ++k) { i = (k%64)/8; j = (k%64)%8;
+		f = w[i]|w[j]; x = w[i]&w[j];
+		if (N(f&*b>>(i>63?9:0)) == 2 && N(f&(*b|*b>>9)) == 2 && x) {
+			return *b|=x;
 		}
-	}}
-	for (int i = 0; i < 8; ++i) {
-	for (int j = 0; j < 8; ++j) { w = W(i)|W(j);
-		if (N(w&*b>>9) == 2 && N(w&(*b|*b>>9)) == 2 && W(i)&W(j)) {
-			printf("bfk %d %d\n", W(i), W(j));
-			return *b|=W(i)&W(j);
+	}
+	/*
+	for (int k = 0; k < 64; ++k) { i = k/8; j = k%8;
+		f = w[i]|w[j]; x = w[i]&w[j];
+		if (N(f&*b>>9) == 2 && N(f&(*b|*b>>9)) == 2 && x) {
+			return *b|=x;
 		}
-	}}
-	
+	}
+	*/
 		
 	// centre
 	// opposite corner
@@ -59,8 +53,8 @@ void P(int b){ int *c, *e; for(e=(c=a)+2; c-a<9; e+=(*c++==*e)*3){
 printf("%c%c", b&1<<*c?88:88-(b&1<<*c+9?9:6*7), *c-*e?0:10);}}
 
 int main(void){
-	//int b=0;
-	int b = 4<<9|1<<9|8|32;
+	for (int i = 0; i < 8; ++i) { w[i] = W(i); }
+	int b = 2|1<<7;
 	char c[2];
 	P(b);
 	while (scanf("%s", c)) {
@@ -70,8 +64,6 @@ int main(void){
 			P(b);
 			S(&b);
 			P(b);
-			// valid input, try to play.
-
 		}
 	}
 
