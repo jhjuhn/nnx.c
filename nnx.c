@@ -29,20 +29,16 @@ int S(int *b){
 	// centre
 	if (!(w[3]&w[7]&(*b|*b>>9))){
 		puts("centre");
-		return *b|=1<<4;
+		return *b|=w[3]&w[7];
 	}
 	
 	// opposite corner
-	/*
-	for (int k = 0; k < 18; k=++k+1){ i = k%9;
-		f = 1<<a[i]; x = 1<<8-a[i];
-		printf("%d %d %d\n", i, f, x);
-		if (N(f&*b>>9) == 1 && N(f&*b|*b>>9) == 2) {
-			puts("opposite");
-			return *b|=x;
-		}
+	if (N(w[3]&*b>>9)==1) {
+		return *b|=w[3]^w[3]&(*b|*b>>9);
 	}
-	*/
+	if (N(w[7]&*b>>9)==1) {
+		return *b|=w[7]^w[7]&(*b|*b>>9);
+	}
 
 	//first available move:
 	puts("confused.");
@@ -58,7 +54,7 @@ printf("%c%c", b&1<<*c?88:88-(b&1<<*c+9?9:6*7), *c-*e?0:10);}}
 
 int main(void){
 	for (int i = 0; i < 8; ++i) { w[i] = W(i); }
-	int b = 0;
+	int b = 1<<4;
 	char c[2];
 	P(b);
 	while (scanf("%s", c)) {
