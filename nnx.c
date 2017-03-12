@@ -3,6 +3,7 @@
 int N(int r){ int n; for (n=r&&1; r-=r&-r; ++n); return n; }
 int O(int b){ return b<<9; }
 // computes the ith winning position.
+int a[]={3,8,1,2,4,6,7,0,5};
 int w[8];
 int W(int n){int r,s,t;return (t=0x1000/(r=1<<(++n)/3+(n==010))/(s=010<<n%3))|r|s;}
 // computer plays the lower bits.
@@ -11,7 +12,7 @@ int S(int *b){
 	int i, j;
 	// win or block win.
 	for (int k = 0; k < 16; ++k) { j = k%8;
-		f = w[j]; x = (w)[j]^(j)[w]&*b>>9;
+		f = w[j]; x = w[j]^j[w]&*b>>9;
 		if (N(f&*b>>(k>7?9:0)) == 2 && N(f&(*b|*b>>9)) == 2) {
 			return *b|= x;
 		}
@@ -26,19 +27,30 @@ int S(int *b){
 
 		
 	// centre
+	if (!(w[3]&w[7]&(*b|*b>>9))){
+		puts("centre");
+		return *b|=1<<4;
+	}
+	
 	// opposite corner
-	// corner
-	// edge
-
+	/*
+	for (int k = 0; k < 18; k=++k+1){ i = k%9;
+		f = 1<<a[i]; x = 1<<8-a[i];
+		printf("%d %d %d\n", i, f, x);
+		if (N(f&*b>>9) == 1 && N(f&*b|*b>>9) == 2) {
+			puts("opposite");
+			return *b|=x;
+		}
+	}
+	*/
 
 	//first available move:
 	puts("confused.");
-	for (int i = 1; i<1<<9; i <<= 1) {
-		if (!(i&(*b|*b>>9))) { return *b|=i; }
+	for (int k = 0; k < 18; k=++k+1){ x = 1<<a[k%9];
+		if (!(x&(*b|*b>>9))) { return *b|=x; }
 	}
 	return 0;
 }
-int a[]={3,8,1,2,4,6,7,0,5};
 
 // prints the game board.
 void P(int b){ int *c, *e; for(e=(c=a)+2; c-a<9; e+=(*c++==*e)*3){
@@ -46,8 +58,7 @@ printf("%c%c", b&1<<*c?88:88-(b&1<<*c+9?9:6*7), *c-*e?0:10);}}
 
 int main(void){
 	for (int i = 0; i < 8; ++i) { w[i] = W(i); }
-	int b = 512<<1|1<<6;
-	//int b = 0;
+	int b = 0;
 	char c[2];
 	P(b);
 	while (scanf("%s", c)) {
