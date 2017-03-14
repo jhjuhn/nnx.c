@@ -12,57 +12,42 @@ void P(int b){ int *c, *e; for(e=(c=a)+2; c-a<9; e+=(*c++==*e)*3){
 printf("%c%c", b&1<<*c?88:88-(b&1<<*c+9?9:6*7), *c-*e?0:10);}}
 
 int M(int b, int t){
+	int u = 3<<18;
 	for (int i = 0; i < 8; ++i) {
-		if (N(b&w[i])==3) { return 1; }
-		if (N(b>>9&w[i])==3) { return -1; }
+		if (N(b&w[i])==3) { return 3<<18; }
+		if (N(b>>9&w[i])==3) { return 1<18; }
 	}
-	if (N(b)==9) { return 0; }
+	if (N(b)==9) { return 2<<18; }
 
 	int r, x, m;
 	if (t == 1) {
-		r = -2; x = 0;
+		r = 0; x = 0;
 		for (int j = 1; j < 1<<9; j*=2) {
 			if(j^j&(b|b>>9)) {
 				m = M(b|j, -1);
 				if (m > r) {
-					r = m;
+					r = u&m|j;
 					x = j;
 				}
 			}
 		}
-		return r;
 	}
 
 	if (t == -1) {
-		r = 2; x = 0;
+		r = 4<<18; x = 0;
 		for (int j = 1; j < 1<<9; j*=2) {
 			if(j^j&(b|b>>9)) {
 				m = M(b|j<<9, 1);
 				if (m < r) {
-					r = m;
+					r = u&m|j;
 					x = j<<9;
 				}
 			}
 		}
-		return r;
-	}
-}
 
-int S(int b){
-	int r = -2;
-	int x = 0;
-	int m;
-	for (int j = 1; j < 1<<9; j <<=1) {
-		if (j^j&(b|b>>9)) {
-			m = M(b|j, -1);
-			if (m > r) {
-				r = m;
-				x = j;
-			}
-		}
 	}
-	printf("R:%d X:%d\n", r, x);	
-	return b|x;
+
+	return r;
 }
 
 int main(void){
@@ -76,7 +61,8 @@ int main(void){
 			b |= 1<<9+a[*c-'0'];
 
 			P(b);
-			b=S(b);
+			//b=S(b);
+			b|=((1<<18)-1)&M(b, 1);
 			P(b);
 		}
 	}
