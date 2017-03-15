@@ -8,21 +8,21 @@ void P(int b){ int *c, *e; for(e=(c=a)+2; c-a<9; e+=(*c++==*e)*3){
 printf("%c%c", b&1<<*c?88:88-(b&1<<*c+9?9:6*7), *c-*e?0:10);}}
 
 int M(int b, int t){
-	int r=0;
+	int m, j, *k, r=0;
 
-	for (int *k = w; k < w+8; ++k) {
-		if ((b&*k)==*k) { r = 3<<18; }
-		if ((b>>9&*k)==*k) { r = 1<<18; }
-		if (!r&&((b|b>>9)&511)==511) { r = 2<<18; }
-	}
-	if (r) { return r; }
-	int m, j;
-	r = (t>0?0:4)<<18;
-	for (int *k = w+8; k < w+17; ++k){
+	for (k = w; k < w+17; ++k) {
+		if (k < w + 8) {
+			r = (m=((b&*k)==*k)*3|((b>>9&*k)==*k)|(!r&&((b|b>>9)&511)==511)*2)?m<<18:r;
+		} else {
+
+			if (k == w+8 && r) { return r; }
+			r = (k==w+8?(1-t)<<19:r);
 		
-		j = 1<<*k;
-		if(j^j&(b|b>>9) && t*(m=M(b|j<<(1+t?0:9),-t))-r*t>0) {
+			j = 1<<*k;
+			if(j^j&(b|b>>9) && t*(m=M(b|j<<(1+t?0:9),-t))-r*t>0) {
 				r = 3<<18&m|j;
+			}
+
 		}
 	}
 
