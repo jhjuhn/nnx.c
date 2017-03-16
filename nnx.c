@@ -1,10 +1,5 @@
 #include <stdio.h>
-// counts # of 1 bits in r
-int N(int r){ int n; for (n=r&&1; r-=r&-r; ++n); return n; }
-// computes the ith winning position.
-int a[]={3,8,1,2,4,6,7,0,5};
-int w[8];
-
+int w[]={0, 0, 0, 0, 0, 0, 0, 0, 3, 8, 1, 2, 4, 6, 7, 0, 5}; int *a = w+8;
 int W(int n){int r,s,t;return (t=0x1000/(r=1<<(++n)/3+(n==010))/(s=010<<n%3))|r|s;}
 
 // prints the game board.
@@ -13,16 +8,17 @@ printf("%c%c", b&1<<*c?88:88-(b&1<<*c+9?9:6*7), *c-*e?0:10);}}
 
 int M(int b, int t){
 	int u = 3<<18;
-	for (int i = 0; i < 8; ++i) {
-		if ((b&w[i])==w[i]) { return 3<<18; }
-		if ((b>>9&w[i])==w[i]) { return 1<<18; }
+	int *k;
+	for (k = w; k-w<8; ++k) {
+		if ((b&*k)==*k) { return 3<<18; }
+		if ((b>>9&*k)==*k) { return 1<<18; }
 	}
-	if (N(b)==9) { return 2<<18; }
+	if (511==((b|b>>9)&511)) { return 2<<18; }
 
-	int r, m;
+	int r, m, j;
 	r = (t>0?0:4)<<18;
-	for (int j = 1; j < 1<<9; j*=2) {
-		if(j^j&(b|b>>9) && t*(m=M(b|j<<(1+t?0:9),-t))-r*t>0) {
+	for (k = w+8; k-w<17; ++k) {
+		if((j=1<<*k)^j&(b|b>>9) && t*(m=M(b|j<<(1+t?0:9),-t))-r*t>0) {
 				r = u&m|j;
 		}
 	}
@@ -32,7 +28,7 @@ int M(int b, int t){
 
 int main(void){
 	for (int i = 0; i < 8; ++i) { w[i] = W(i); }
-	int x = -1;
+	int x = 1;
 	int b = 4-4*x;
 	char c[2];
 	P(b);
