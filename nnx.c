@@ -1,7 +1,7 @@
 #include <stdio.h>
 #define R return
 int w[]={0, 0, 0, 0, 0, 0, 0, 0, 3, 8, 1, 2, 4, 6, 7, 0, 5}; int *a=w+8; int
-W(int n){int r,s,t;return (t=0x1000/(r=1<<(++n)/3+(n==010))/(s=010<<n%3))|r|s;}
+W(int n){int r,s,t;R (t=0x1000/(r=1<<(++n)/3+(n==010))/(s=010<<n%3))|r|s;}
 
 int P(int b){int *c,*e; for(e=(c=a)+2; c-a<9; e+=(*c++==*e)*3){
 printf("%c%c", b&1<<*c?88:88-(b&1<<*c+9?9:6*7), *c-*e?0:10);} R(0);}
